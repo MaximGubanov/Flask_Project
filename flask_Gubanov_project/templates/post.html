@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+
+
+{% block content %}
+    <div class="container text-left relative_block" style="width: 1040px;">
+        <div class="card mb-3">
+            <img src="https://sourceit.com.ua/images/prof-test.png" class="card-img-top" alt="...">
+            <div class="card-body">
+                <p class="card-text">Автор: {{ post.author.username }}</p>
+                <h3 class="card-title">{{ post.title }}</h3>
+                <p class="card-text">{{ post.content }}</p>
+                <hr>
+                <p class="card-text"><small class="text-muted">Последнее обновление {{ post.date_posted.strftime('%A, %d %B %Y %I:%M %p') }}</small></p>
+                <div class="post_btns row justify-content-end">
+                    {% if post.author == current_user %}
+                        <div class="post_btn col-2 text-center">
+                            <a href="{{ url_for('posts.update_post', post_id=post.id) }}" class="btn btn-primary">Редактировать</a>
+                        </div>
+                        <div class="post_btn col-2 text-center">
+                            <form action="{{ url_for('posts.delete_post', post_id=post.id) }}" method="POST">
+                              <input class="btn btn-danger" type="submit" value="Delete">
+                            </form>
+                        </div>
+                    {% else %}
+                        <div class="post_btn col-2 text-center">
+                          {{ post.likes }}
+                          <div class="post_btn col-2 text-center">
+                            <form action="{{ url_for('posts.like_post', post_id=post.id) }}" method="POST">
+                              <input class="btn btn-primary" type="submit" value="Like">
+                            </form>
+                          </div>
+                        </div>
+                    {% endif %}                
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

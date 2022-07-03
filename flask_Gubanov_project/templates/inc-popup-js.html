@@ -1,0 +1,37 @@
+<script>
+    const popup = document.getElementById("popup")
+    const btnClosePopup = document.getElementById("btnClosePopup")
+    const body = document.querySelector("body")
+
+
+    linkLogin.addEventListener('click', () => {
+        const linkLogin =document.getElementById("linkLogin")
+        const popupAuth = document.getElementById("popupAuth")
+
+        popup.classList.remove("hidden")
+        popupAuth.classList.remove("hidden")
+        body.classList.add("overflowHidden")
+    })
+
+    linkReg.addEventListener('click', () => {
+        const linkReg = document.getElementById("linkReg")
+        const popupReg = document.getElementById("popupReg")
+
+        popup.classList.remove("hidden")
+        popupReg.classList.remove("hidden")
+        body.classList.add("overflowHidden")
+    })
+
+    btnClosePopup.addEventListener('click', () => {
+        popup.classList.add("hidden")
+        body.classList.remove("overflowHidden")
+
+        if (!popupAuth.classList.contains("hidden")) {
+            popupAuth.classList.add("hidden")
+        }
+
+        if (!popupReg.classList.contains("hidden")) {
+            popupReg.classList.add("hidden")
+        }
+    })
+</script>

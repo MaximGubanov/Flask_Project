@@ -1,0 +1,21 @@
+<div class="sidebar-block">
+    <h3 style="font-weight: 600; font-size: large;">Топ-8 авторов</h3>
+    <div class="user row text-center justify-content-between">
+        {% for user in users %}
+            <div class="user_ava col-3">
+                <img src="https://img.favpng.com/21/13/5/user-profile-default-computer-icons-network-video-recorder-png-favpng-7dPZA8WRdY80Uw3bdMWkEN4fR.jpg" alt="" style="width: 44px;"><br>
+                {{ user.username }}
+            </div>
+    {% endfor %}
+    </div>
+    <hr style="border: 2px solid; color:rgb(38, 38, 38)">
+    <h3 style="font-weight: 600; font-size: large;">Топ-5 записей</h3>
+    {% for item in posts %}
+        <div class="top-post">
+            <a href=""><h5 style="font-weight: 600; font-size: large; color: orangered;">{{ item.title }}</h6></a>
+            {{ item.content[:50] }}...<br>
+            <hr>
+        </div>
+    {% endfor %}
+</div>
+

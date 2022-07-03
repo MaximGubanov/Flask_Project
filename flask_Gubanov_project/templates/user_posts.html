@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+
+
+{% block content %}
+    <div class="container">
+        <h3 class="mb-3">Посты опубликованы пользователем {{ user.username }} ({{ posts.total }})</h1>
+        {% for post in posts.items %}
+            <div class="card mb-3" style="max-width: 1040px;">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img src="https://th.jobsdb.com/th-th/wp-content/uploads/sites/3/2021/10/How-to-get-promoted-to-be-IT-managerContent-Image_-800x500-1.jpg" class="img-fluid rounded-start" alt="">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ post.title }}</h5>
+                            <p class="card-text">{{ post.content[:120] }}...<br>
+                                <a href="{{ url_for('posts.post', post_id=post.id) }}">Читать далее</a></p>
+                            <p class="card-text">Автор: <a href="{{ url_for('users.user_posts', username=post.author.username) }}">{{ post.author.username }}</a></p>
+                            <p class="card-text"><small class="text-muted">Опубликовано {{ post.date_posted.strftime('%A, %d %B %Y %I:%M %p') }}</small></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="container text-center">
+        {% for page_num in posts.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+            {% if page_num %}
+                {% if posts.page == page_num %}
+                    <a class="btn btn-primary mb-4" href="{{ url_for('users.user_posts', username=user.username, page=page_num) }}">{{ page_num }}</a>
+                {% else %}
+                    <a class="btn btn-outline-success mb-4" href="{{ url_for('users.user_posts', username=user.username, page=page_num) }}">{{ page_num }}</a>
+                {% endif %}
+                {% else %}
+                ...
+                {% endif %}
+        {% endfor %}
+    </div>
+
+{% endblock content %}

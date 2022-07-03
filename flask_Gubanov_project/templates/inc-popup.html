@@ -1,0 +1,25 @@
+<!--{% block register %}{% endblock register %}-->
+
+<div class="popup hidden" id="popup">
+    <div class="popup_fade"></div>
+    <div class="popup_body text-center">
+        <div class="auth-popup_content hidden" id="popupAuth">
+            <h5>Авторизуйтесь</h5><br>
+            <form action="">
+                <input type="text" placeholder="имя пользователя"><br><br>
+                <input type="password" placeholder="пароль"><br><br>
+                <button type="button" class="btn btn-primary" id="authLogin">Войти</button>
+            </form>
+        </div>
+        <div class="reg-popup_content hidden" id="popupReg">
+            <h5>Регистрация</h5><br>
+            <form action="">
+                <input type="text" placeholder="имя пользователя"><br><br>
+                <input type="password" placeholder="пароль"><br><br>
+                <input type="email" placeholder="email"><br><br>
+                <button type="button" class="btn btn-primary" id="authReg">Зарегистрироваться</button>
+            </form>
+        </div><br>
+        <div class="closePopup" id="btnClosePopup"><a href="#">Закрыть</a></div>
+    </div>
+</div>
