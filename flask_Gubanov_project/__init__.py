@@ -3,11 +3,13 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_Gubanov_project.config import Config
 from flask_bcrypt import Bcrypt
+from flask_mail import Mail
 
 
 db = SQLAlchemy()
 login_manager = LoginManager()
 bcrypt = Bcrypt()
+mail = Mail()
 
 
 def create_app():
@@ -27,5 +29,7 @@ def create_app():
 
     from flask_Gubanov_project.posts.routes import posts
     app.register_blueprint(posts)
+
+    mail.init_app(app)
 
     return app

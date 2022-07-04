@@ -62,8 +62,7 @@ class RequestResetForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     submit = SubmitField('Изменить пароль')
 
-    @staticmethod
-    def validate_email(email):
+    def validate_email(self, email):
         user = User.query.filter_by(email=email.data).first()
         if user is None:
             raise ValidationError('Аккаунт с данным email-адресом отсутствует. Вы можете зарегистрировать его')
@@ -74,5 +73,3 @@ class ResetPasswordForm(FlaskForm):
     password = PasswordField('Пароль:', validators=[DataRequired()])
     confirm_password = PasswordField('Подтвердите пароль', validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Переустановить пароль')
-
-
