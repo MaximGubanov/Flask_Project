@@ -5,6 +5,7 @@ from wtforms import SubmitField
 from flask_Gubanov_project import db
 from flask_Gubanov_project.models import Post
 from flask_Gubanov_project.posts.forms import PostForm
+from flask_Gubanov_project.users.utils import save_picture
 
 posts = Blueprint('posts', __name__)
 
@@ -22,11 +23,13 @@ def allpost():
 def new_post():
     form = PostForm()
     if form.validate_on_submit():
-        post = Post(title=form.title.data, content=form.content.data, author=current_user, likes=0)
+        post = Post(title=form.title.data, content=form.content.data, author=current_user)
+        if form.picture.data:
+            picture_file = save_picture(form.picture.data, path_save='static/post_images')
+            post.post_image = picture_file
         db.session.add(post)
         db.session.commit()
         flash('Ваш пост создан!', 'success')
-        # return redirect(url_for('users.user_posts'))
         return redirect(url_for('posts.allpost'))
     return render_template('create_post.html', title='Новый пост', form=form, legend='Новый пост')
 
@@ -47,6 +50,9 @@ def update_post(post_id):
     if form.validate_on_submit():
         post.title = form.title.data
         post.content = form.content.data
+        if form.picture.data:
+            picture_file = save_picture(form.picture.data, path_save='static/post_images')
+            post.post_image = picture_file
         db.session.commit()
         flash('Ваш пост обновлен!', 'success')
         return redirect(url_for('posts.post', post_id=post.id))
@@ -71,10 +77,10 @@ def delete_post(post_id):
 @posts.route("/post/<int:post_id>/like", methods=['POST'])
 @login_required
 def like_post(post_id):
-    post = Post.query.get_or_404(post_id)
-    if post.author == current_user:
-        abort(403)
-    post.likes += 1
-    db.session.add(post)
-    db.session.commit()
+    # post = Post.query.get_or_404(post_id)
+    # if post.author == current_user:
+    #     abort(403)
+    # post.likes += 1
+    # db.session.add(post)
+    # db.session.commit()
     return redirect(url_for('posts.allpost'))

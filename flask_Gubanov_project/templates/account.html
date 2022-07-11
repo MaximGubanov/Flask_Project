@@ -1,5 +1,11 @@
 {% extends "layout.html" %}
 
+{% block style %}
+    <style>
+        .account-img {width: 100px; height: 100px;}
+    </style>
+{% endblock style %}
+
 {% block content %}
 <div class="reg">
         <div class="reg_body text-center">
@@ -13,9 +19,10 @@
                     </div>
                 </div>
 
-                <form method="POST" action="">
+                <form method="POST" action="" enctype="multipart/form-data">
                     {{ form.hidden_tag() }}
                     <fieldset class="form-group">
+                        
                         {% if form.username.errors %}
                               {{ form.username(class="form-control form-control-lg is-invalid") }}
                                 <div class="invalid-feedback">
@@ -37,7 +44,7 @@
                                 </div>
                         {% else %}
                             {{ form.email(class="form-control form-control-lg") }}
-                        {% endif %}
+                        {% endif %}<br><br>
 
                         {{ form.picture.label() }}
                         {{ form.picture(class="form-control-file") }}

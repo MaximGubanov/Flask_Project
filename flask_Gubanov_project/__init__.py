@@ -30,6 +30,9 @@ def create_app():
     from flask_Gubanov_project.posts.routes import posts
     app.register_blueprint(posts)
 
+    from flask_Gubanov_project.errors.handlers import errors
+    app.register_blueprint(errors)
+
     mail.init_app(app)
 
     return app

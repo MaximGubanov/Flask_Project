@@ -11,9 +11,21 @@
                     {% for post in posts %}
                         <div class="card w-95">
                             <div class="card-body">
-                            <h5 class="card-title">{{ post.title }}</h5>
-                            <p class="card-text">{{ post.content[:120] }} ...</p>
-                            <a href="{{ url_for('posts.post', post_id=post.id) }}" class="btn btn-primary">Читать</a>
+                                <h5 class="card-title"><a href="{{ url_for('posts.post', post_id=post.id) }}">{{ post.title }}</a></h5>
+                                <p class="card-text">{{ post.content[:120] }} ...</p>
+                                <div class="row justify-content-between">
+                                    <div class="col-10">
+                                        <small>
+                                            <span>Опубликовано: {{ post.date_posted.strftime('%A, %d %B %Y %I:%M %p') }}</span>
+                                        </small>
+                                    </div>
+                                    <div class="col-2 text-center">
+                                        <!-- <small class="text-muted">
+                                            <img src="{{ url_for('static', filename='images/like_mini.png') }}" alt="like"> 
+                                            {{ post.total_likes}}
+                                        </small>     -->
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     {% endfor %}

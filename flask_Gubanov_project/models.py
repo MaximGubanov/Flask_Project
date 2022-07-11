@@ -11,6 +11,15 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
+class Like(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
+    username = db.Column(db.String, db.ForeignKey('user.username'), nullable=False)
+
+    def __repr__(self):
+        return f"<Like> id:{self.id}, post_id:{self.post_id}, username:{self.username}"
+
+
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
@@ -18,6 +27,9 @@ class User(db.Model, UserMixin):
     image_file = db.Column(db.String(20), nullable=False, default='default.png')
     password = db.Column(db.String(60), nullable=False)
     posts = db.relationship('Post', backref='author', lazy=True)
+
+    def __repr__(self):
+        return f"Пользователь('{self.username}','{self.email}', '{self.image_file}')"
 
     def get_reset_token(self, expires_sec=1800):
         s = Serializer(current_app.config['SECRET_KEY'], expires_sec)
@@ -33,9 +45,6 @@ class User(db.Model, UserMixin):
             return None
         return User.query.get(user_id)
 
-    def __repr__(self):
-        return f"Пользователь('{self.username}','{self.email}', '{self.image_file}')"
-
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -43,7 +52,9 @@ class Post(db.Model):
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     content = db.Column(db.Text, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    likes = db.Column(db.Integer, nullable=True)
+    total_likes = db.Column(db.Integer, nullable=True, default=0)
+    likes = db.relationship('Like', backref='like')
+    post_image = db.Column(db.String(20), nullable=False, default='post_default_img.png')
 
     def __repr__(self):
         return f"Запись('{self.title}', '{self.date_posted}')"

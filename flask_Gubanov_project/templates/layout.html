@@ -11,6 +11,9 @@
         <script src="https://kit.fontawesome.com/c6deb58922.js" crossorigin="anonymous"></script>
         {% include "inc-general-style.html" %}
 
+        {% block style %}
+        {% endblock style %}
+
         {% if title %}
             <title>Flask-блог - {{ title }}</title>
         {% else %}

@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+
+{% block style %}
+    <style>
+        .error_block {
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 200px;
+        }
+        .error_block span {
+            font-size: 200px;
+            font-weight: 700;
+        }
+    </style>
+{% endblock style %}
+
+{% block content %}
+    <div class="container">
+        <div class="error_block">
+            <p><span>{{ error.code }}</span></p>
+            <h3><p>{{ error.description }}</p></h3>
+        </div>
+    </div>
+{% endblock content %}

@@ -1,9 +1,17 @@
 {% extends "layout.html" %}
 
+{% block style %}
+    <style>
+        .content-section {
+            margin: 0 0 30px 0;
+        }
+    </style>
+{% endblock style %}
+
 {% block content %}
     <div class="container text-left" style="width: 1040px;">
         <div class="content-section">
-            <form method="POST" action="">
+            <form method="POST" action="" enctype="multipart/form-data">
                 {{ form.hidden_tag() }}
                 <fieldset class="form-group">
                     <legend class="border-bottom mb-4">{{ legend }}</legend>
@@ -19,7 +27,7 @@
                         {% else %}
                             {{ form.title(class="form-control form-control-lg") }}
                         {% endif %}
-                    </div>
+                    </div><br>
                     <div class="form-group">
                         {{ form.content.label(class="form-control-label") }}
                         {% if form.content.errors %}
@@ -32,10 +40,19 @@
                         {% else %}
                             {{ form.content(class="form-control form-control-lg") }}
                         {% endif %}
+                    </div><br>
+                    <div class="form-group">
+                        {{ form.picture.label() }}
+                        {{ form.picture(class="form-control-file") }}
+                        {% if form.picture.errors %}
+                            {% for error in form.picture.errors %}
+                                <span class="text-danger">{{ error }}</span></br>
+                            {% endfor %}
+                        {% endif %}
                     </div>
-                </fieldset>
+                </fieldset><br>
                 <div class="form-group">
-                    {{ form.submit(class="btn btn-outline-info") }}
+                    {{ form.submit(class="btn btn-primary") }}
                 </div>
             </form>
         </div>
