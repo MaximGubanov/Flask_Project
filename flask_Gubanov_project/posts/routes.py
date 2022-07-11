@@ -37,8 +37,11 @@ def new_post():
 @posts.route("/post/<int:post_id>")
 def post(post_id):
     post = Post.query.get_or_404(post_id)
-    liked = Like.query.filter(Like.post_id == post_id, Like.username == current_user.username).first()
-    return render_template('post.html', title=post.title, post=post, liked=liked)
+    try:
+        liked = Like.query.filter(Like.post_id == post_id, Like.username == current_user.username).first()
+        return render_template('post.html', title=post.title, post=post, liked=liked)
+    except AttributeError:
+        return render_template('post.html', title=post.title, post=post)
 
 
 @posts.route("/post/<int:post_id>/update", methods=['GET', 'POST'])
