@@ -4,7 +4,7 @@
 {% block content %}
     <div class="container text-left relative_block" style="width: 1040px;">
         <div class="card mb-3">
-            <img src="{{ url_for('static', filename='post_images/' + post.post_image) }}" class="card-img-top" style="width: 30%;" alt="...">
+            <img src="{{ url_for('static', filename='post_images/' + post.post_image) }}" class="card-img-top" alt="...">
             <div class="card-body">
                 <p class="card-text">Автор: <a href="{{ url_for('users.user_posts', username=post.author.username) }}">{{ post.author.username }}</a></p>
                 <h3 class="card-title">{{ post.title }}</h3>
@@ -22,16 +22,23 @@
                             </form>
                         </div>
                     {% else %}
-                        
-                        <div class="post_btn col-2 text-center">
-                          <div class="post_btn col-2 text-center">
-                            <form action="{{ url_for('posts.like_post', post_id=post.id) }}" method="POST">
-                              <input class="btn btn-primary" type="submit" value="Нравиться">
-                            </form>
-                          </div>
-                        </div>
+
+                        {% if liked %}
+                            <div class="post_btn col-4 text-center">
+                                <small class="text-muted">
+                                    Вы уже поставили like этой статье
+                                </small>
+                            </div>
+                        {% else %}
+                            <div class="post_btn col-2 text-center">
+                                <form action="{{ url_for('posts.like_post', post_id=post.id) }}" method="POST">
+                                    <input class="btn btn-primary" type="submit" value="Нравиться">
+                                </form>
+                            </div>
+                        {% endif %}
+
                         <div class="col-1 text-center">
-                            <small>
+                            <small class="text-muted">
                                 <img src="{{ url_for('static', filename='images/like_mini.png') }}" alt="">
                                 {{ post.total_likes }}
                             </small>

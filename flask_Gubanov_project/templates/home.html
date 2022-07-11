@@ -8,7 +8,7 @@
             <section class="posts-block block col-8">
                 <h3>Последние добаленые записи</h3>
                 <div>
-                    {% for post in posts %}
+                    {% for post in last_posts %}
                         <div class="card w-95">
                             <div class="card-body">
                                 <h5 class="card-title"><a href="{{ url_for('posts.post', post_id=post.id) }}">{{ post.title }}</a></h5>

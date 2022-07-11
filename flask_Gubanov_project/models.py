@@ -45,6 +45,11 @@ class User(db.Model, UserMixin):
             return None
         return User.query.get(user_id)
 
+    @staticmethod
+    def get_top_users(limit=5):
+        users = User.query.filter(User.posts).all()
+        return users
+
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -55,6 +60,24 @@ class Post(db.Model):
     total_likes = db.Column(db.Integer, nullable=True, default=0)
     likes = db.relationship('Like', backref='like')
     post_image = db.Column(db.String(20), nullable=False, default='post_default_img.png')
+
+    @staticmethod
+    def counter_likes(post_id):
+        all_likes = Like.query.filter(Like.post_id == post_id).all()
+        post = Post.query.get(post_id)
+        post.total_likes = len(all_likes)
+        db.session.add(post)
+        db.session.commit()
+
+    @staticmethod
+    def get_top_posts_by_likes(limit=1):
+        list_order = Post.query.order_by(Post.total_likes.desc()).limit(limit)
+        return list_order
+
+    @staticmethod
+    def get_last_post(limit=1):
+        last_post = Post.query.order_by(Post.date_posted.desc()).limit(limit)
+        return last_post
 
     def __repr__(self):
         return f"Запись('{self.title}', '{self.date_posted}')"

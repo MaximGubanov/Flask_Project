@@ -3,7 +3,7 @@ from flask_login import current_user, login_required
 from wtforms import SubmitField
 
 from flask_Gubanov_project import db
-from flask_Gubanov_project.models import Post
+from flask_Gubanov_project.models import Post, Like
 from flask_Gubanov_project.posts.forms import PostForm
 from flask_Gubanov_project.users.utils import save_picture
 
@@ -37,7 +37,8 @@ def new_post():
 @posts.route("/post/<int:post_id>")
 def post(post_id):
     post = Post.query.get_or_404(post_id)
-    return render_template('post.html', title=post.title, post=post)
+    liked = Like.query.filter(Like.post_id == post_id, Like.username == current_user.username).first()
+    return render_template('post.html', title=post.title, post=post, liked=liked)
 
 
 @posts.route("/post/<int:post_id>/update", methods=['GET', 'POST'])
@@ -77,10 +78,18 @@ def delete_post(post_id):
 @posts.route("/post/<int:post_id>/like", methods=['POST'])
 @login_required
 def like_post(post_id):
-    # post = Post.query.get_or_404(post_id)
-    # if post.author == current_user:
-    #     abort(403)
-    # post.likes += 1
-    # db.session.add(post)
-    # db.session.commit()
-    return redirect(url_for('posts.allpost'))
+    print(current_user.username)
+    try:
+        like = Like.query.filter(Like.post_id == post_id, Like.username == current_user.username).first()
+        if like:
+            flash('Вы уже ставили лайк к этой записи!', 'success')
+            return redirect(url_for('posts.post', post_id=post_id))
+        else:
+            new_like = Like(post_id=post_id, username=current_user.username)
+            db.session.add(new_like)
+            db.session.commit()
+            Post.counter_likes(post_id)
+            return redirect(url_for('posts.post', post_id=post_id))
+    except Exception as err:
+        print(err)
+        return redirect(url_for('posts.allpost'))

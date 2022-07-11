@@ -1,17 +1,17 @@
 <div class="sidebar-block">
     <h3 style="font-weight: 600; font-size: large;">Топ-5 авторов</h3>
     <div class="user row text-center justify-content-between">
-        {% for user in users %}
+        {% for user in top_users %}
             <div class="user_ava col-2">
                 <a href="{{ url_for('users.user_posts', username=user.username) }}"><img src="{{ url_for('static', filename='profile_pics/' + user.image_file) }}" class="rounded-circle article-img" style="width: 50px; height: 50px;" alt=""></a>
             </div>
     {% endfor %}
     </div>
     <hr style="border: 2px solid; color:rgb(38, 38, 38)">
-    <h3 style="font-weight: 600; font-size: large;">Топ-5 записей</h3>
-    {% for post in posts %}
+    <h3 style="font-weight: 600; font-size: large;">Топ-5 статей</h3>
+    {% for post in top_posts %}
         <div class="top-post">
-            <a href=""><h5 style="font-weight: 600; font-size: large; color: orangered;">{{ post.title }}</h6></a>
+            <a href=""><h5 style="font-weight: 600; font-size: large; color: orangered;">{{ post.title }}</h5></a>
             {{ post.content[:50] }}...<br>
             <div class="row justify-content-between">
                 <div class="col-10"></div>

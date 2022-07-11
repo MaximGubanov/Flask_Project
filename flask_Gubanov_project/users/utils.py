@@ -14,7 +14,7 @@ def save_picture(form_picture, path_save):
     _, f_ext = os.path.splitext(form_picture.filename)
     picture_fn = random_hex + f_ext
     picture_path = os.path.join(current_app.root_path, f'{path_save}', picture_fn)
-    output_size = (150, 150)
+    output_size = (1000, 1000)
     i = Image.open(form_picture)
     i.thumbnail(output_size)
     i.save(picture_path)
