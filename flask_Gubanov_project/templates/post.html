@@ -1,5 +1,18 @@
 {% extends "layout.html" %}
 
+{% block style %}
+    <style type="text/css">
+        .to-comment {
+            width: 100%;
+            border: hidden;
+            border-bottom: 2px solid blue;
+        }
+        .to-comment:focus {border: inherit;}
+        .comment span {font-style: italic; font-weight: 600;}
+        .block-comments {width: 90%;}
+        .block-comments ul {list-style: none;}
+    </style>
+{% endblock style %}
 
 {% block content %}
     <div class="container text-left relative_block" style="width: 1040px;">
@@ -10,8 +23,14 @@
                 <h3 class="card-title">{{ post.title }}</h3>
                 <p class="card-text">{{ post.content }}</p>
                 <hr>
-                <p class="card-text"><small class="text-muted">Последнее обновление {{ post.date_posted.strftime('%A, %d %B %Y %I:%M %p') }}</small></p>
                 <div class="post_btns row justify-content-end">
+                    <div class="col-8">
+                        <p class="card-text">
+                            <small class="text-muted">
+                                Последнее обновление {{ post.date_posted.strftime('%A, %d %B %Y %I:%M %p') }}
+                            </small>
+                        </p>
+                    </div>
                     {% if post.author == current_user %}
                         <div class="post_btn col-2 text-center">
                             <a href="{{ url_for('posts.update_post', post_id=post.id) }}" class="btn btn-primary">Редактировать</a>
@@ -22,21 +41,19 @@
                             </form>
                         </div>
                     {% else %}
-
                         {% if liked %}
-                            <div class="post_btn col-4 text-center">
+                            <div class="post_btn col-3 text-center">
                                 <small class="text-muted">
-                                    Вы уже поставили like этой статье
+                                    Вы уже поставили like
                                 </small>
                             </div>
                         {% else %}
                             <div class="post_btn col-2 text-center">
                                 <form action="{{ url_for('posts.like_post', post_id=post.id) }}" method="POST">
-                                    <input class="btn btn-primary" type="submit" value="Нравиться">
+                                    <input class="btn btn-primary" type="submit" value="Нравится">
                                 </form>
                             </div>
                         {% endif %}
-
                         <div class="col-1 text-center">
                             <small class="text-muted">
                                 <img src="{{ url_for('static', filename='images/like_mini.png') }}" alt="">
@@ -44,6 +61,27 @@
                             </small>
                         </div>
                     {% endif %}                
+                </div><br>
+                <form>
+                    <textarea class="to-comment text-muted" rows="1" placeholder="Оставьте комментарий" maxlength="150"></textarea><br><br>
+                    <input class="btn btn-primary" type="submit" value="Комментировать">
+                </form><br>
+                <div class="block-comments">
+                    <ul>
+                        <li>
+                            <p class="comment">
+                                <span>
+                                    <a href="">User: </a>
+                                </span>
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum sequi ratione aut error! Enim laborum dolorem aperiam reiciendis porro aspernatur totam, ipsa ipsum perferendis molestiae voluptates corrupti quas quidem dolores, facere perspiciatis sapiente illum atque nisi repellat expedita quo dolore quisquam sit. Ex, quae fugit iusto fuga exercitationem voluptas. Eligendi?</p>
+                        </li>
+                        <li>
+                            <p class="comment"><span>User: </span>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Inventore rem facere cum odit excepturi quidem quo, accusamus dolore fuga itaque!</p>
+                        </li>
+                        <li>
+                            <p class="comment"><span>User: </span>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Inventore rem facere cum odit excepturi quidem quo, accusamus dolore fuga itaque!</p>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
