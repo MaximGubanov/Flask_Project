@@ -9,3 +9,8 @@ class PostForm(FlaskForm):
     content = TextAreaField('Content', validators=[DataRequired()])
     picture = FileField('Выберете изображение', validators=[FileAllowed(['jpg', 'png'])])
     submit = SubmitField('Опубликовать')
+
+
+class CommentForm(FlaskForm):
+    content = TextAreaField('Content', validators=[DataRequired()])
+    submit = SubmitField('Комментировать')

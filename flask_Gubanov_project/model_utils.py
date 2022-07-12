@@ -41,12 +41,22 @@ class Post(db.Model):
     total_likes = db.Column(db.Integer, nullable=True, default=0)
     likes = db.relationship('Like', backref='like')
     post_image = db.Column(db.String(20), nullable=False, default='post_default_img.png')
+    comments = db.relationship('Comment', backref='post')
 
     def __repr__(self):
         return f"Запись('{self.title}', '{self.date_posted}')"
 
 
+class Comment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.Text, nullable=False)
+    date_commented = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    username = db.Column(db.Integer, db.ForeignKey('user.username'), nullable=False)
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
+    is_deleted = db.Column(db.Boolean, default=True)
+
+
 if __name__ == '__main__':
-    db.drop_all()
-    db.create_all()
+    # db.drop_all()
+    # db.create_all()
 

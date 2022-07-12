@@ -21,8 +21,12 @@
                                     </div>
                                     <div class="col-2 text-center">
                                         <small class="text-muted">
+                                            <img src="{{ url_for('static', filename='images/comment_img_mini.png') }}" style="width: 24px;" alt="">
+                                            {{ post.comments|length }}
+                                        </small>
+                                        <small class="text-muted">
                                             <img src="{{ url_for('static', filename='images/like_mini.png') }}" alt="like">
-                                            {{ post.total_likes}}
+                                            {{ post.total_likes }}
                                         </small>
                                     </div>
                                 </div>

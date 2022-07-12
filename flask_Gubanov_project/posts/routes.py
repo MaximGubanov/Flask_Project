@@ -3,8 +3,8 @@ from flask_login import current_user, login_required
 from wtforms import SubmitField
 
 from flask_Gubanov_project import db
-from flask_Gubanov_project.models import Post, Like
-from flask_Gubanov_project.posts.forms import PostForm
+from flask_Gubanov_project.models import Post, Like, Comment
+from flask_Gubanov_project.posts.forms import PostForm, CommentForm
 from flask_Gubanov_project.users.utils import save_picture
 
 posts = Blueprint('posts', __name__)
@@ -37,11 +37,12 @@ def new_post():
 @posts.route("/post/<int:post_id>")
 def post(post_id):
     post = Post.query.get_or_404(post_id)
+    comments = Comment.get_comments_order_by_desc(post_id)
     try:
         liked = Like.query.filter(Like.post_id == post_id, Like.username == current_user.username).first()
-        return render_template('post.html', title=post.title, post=post, liked=liked)
+        return render_template('post.html', title=post.title, post=post, liked=liked, comments=comments)
     except AttributeError:
-        return render_template('post.html', title=post.title, post=post)
+        return render_template('post.html', title=post.title, post=post, comments=comments)
 
 
 @posts.route("/post/<int:post_id>/update", methods=['GET', 'POST'])
@@ -81,7 +82,6 @@ def delete_post(post_id):
 @posts.route("/post/<int:post_id>/like", methods=['POST'])
 @login_required
 def like_post(post_id):
-    print(current_user.username)
     try:
         like = Like.query.filter(Like.post_id == post_id, Like.username == current_user.username).first()
         if like:
@@ -96,3 +96,33 @@ def like_post(post_id):
     except Exception as err:
         print(err)
         return redirect(url_for('posts.allpost'))
+
+
+@posts.route("/post/<int:post_id>/add-comment", methods=['POST'])
+@login_required
+def add_comment(post_id):
+    try:
+        data = request.form['comment']
+        limit_symbol = 1000
+        if isinstance(data, str) and 0 < len(data) < limit_symbol:
+            comment = Comment(username=current_user.username, post_id=post_id, content=request.form['comment'])
+            db.session.add(comment)
+            db.session.commit()
+    except Exception as err:
+        print(err)
+        return redirect(url_for('posts.post', post_id=post_id))
+    return redirect(url_for('posts.post', post_id=post_id))
+
+
+@posts.route("/post/<int:comment_id>/del-comment/<int:post_id>/", methods=['POST'])
+@login_required
+def delete_comment(post_id, comment_id):
+    try:
+        c = Comment.query.get(comment_id)
+        c.is_deleted = True
+        db.session.add(c)
+        db.session.commit()
+        return redirect(url_for('posts.post', post_id=post_id))
+    except Exception as err:
+        print(err)
+    return redirect(url_for('posts.post', post_id=post_id))

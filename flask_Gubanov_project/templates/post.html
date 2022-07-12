@@ -62,28 +62,28 @@
                         </div>
                     {% endif %}                
                 </div><br>
-                <form>
-                    <textarea class="to-comment text-muted" rows="1" placeholder="Оставьте комментарий" maxlength="150"></textarea><br><br>
+                <form action="{{ url_for('posts.add_comment', post_id=post.id) }}" method="POST">
+                    <input name="comment" type="text" class="to-comment" placeholder="Оставьте комментарий" autocomplete="off">
+                    <br><br>
                     <input class="btn btn-primary" type="submit" value="Комментировать">
                 </form><br>
                 <div class="block-comments">
+                    {% for c in comments %}
                     <ul>
-                        <li>
-                            <p class="comment">
-                                <span>
-                                    <a href="">User: </a>
-                                </span>
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum sequi ratione aut error! Enim laborum dolorem aperiam reiciendis porro aspernatur totam, ipsa ipsum perferendis molestiae voluptates corrupti quas quidem dolores, facere perspiciatis sapiente illum atque nisi repellat expedita quo dolore quisquam sit. Ex, quae fugit iusto fuga exercitationem voluptas. Eligendi?</p>
-                        </li>
-                        <li>
-                            <p class="comment"><span>User: </span>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Inventore rem facere cum odit excepturi quidem quo, accusamus dolore fuga itaque!</p>
-                        </li>
-                        <li>
-                            <p class="comment"><span>User: </span>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Inventore rem facere cum odit excepturi quidem quo, accusamus dolore fuga itaque!</p>
-                        </li>
+                        {% if c.is_deleted == False %}
+                            <a href="{{ url_for('users.user_posts', username=post.author.username) }}" style="font-weight: 800;">{{ c.username }}: </a>{{ c.content }}
+                            <p><small>Дата: {{ c.date_commented.strftime('%A, %d %B %Y %I:%M %p') }}</small></p>
+                            {% if c.username == current_user.username %}
+                                <form action="{{ url_for('posts.delete_comment', comment_id=c.id, post_id=post.id)}}" method="POST">
+                                    <input class="btn btn-primary" type="submit" value="Удалить">
+                                </form>
+                            {% endif %}
+                        {% endif %}  
                     </ul>
+                    {% endfor %}
                 </div>
             </div>
         </div>
     </div>
 {% endblock content %}
+

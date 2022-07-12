@@ -60,6 +60,7 @@ class Post(db.Model):
     total_likes = db.Column(db.Integer, nullable=True, default=0)
     likes = db.relationship('Like', backref='like')
     post_image = db.Column(db.String(20), nullable=False, default='post_default_img.png')
+    comments = db.relationship('Comment', backref='post')
 
     @staticmethod
     def counter_likes(post_id):
@@ -79,5 +80,23 @@ class Post(db.Model):
         last_post = Post.query.order_by(Post.date_posted.desc()).limit(limit)
         return last_post
 
+    def total_comments(self):
+        c = Comment.query.filter(Comment.post_id == self.id).all()
+        return len(c)
+
     def __repr__(self):
         return f"Запись('{self.title}', '{self.date_posted}')"
+
+
+class Comment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.Text, nullable=False)
+    date_commented = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    username = db.Column(db.Integer, db.ForeignKey('user.username'), nullable=False)
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
+    is_deleted = db.Column(db.Boolean, default=False)
+
+    @staticmethod
+    def get_comments_order_by_desc(post_id):
+        c = Comment.query.order_by(Comment.date_commented.desc()).filter(Comment.post_id == post_id).all()
+        return c
